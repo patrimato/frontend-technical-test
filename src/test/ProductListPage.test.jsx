@@ -66,4 +66,19 @@ describe('ProductListPage', () => {
       await screen.findByText('Could not load products. Please try again.')
     ).toBeInTheDocument()
   })
+
+  it('shows empty state when no products match the search', async () => {
+    render(
+      <MemoryRouter>
+        <ProductListPage />
+      </MemoryRouter>
+    )
+    await screen.findByText('iPhone 14')
+    fireEvent.change(screen.getByPlaceholderText('Search by brand or model'), {
+      target: { value: 'Nokia' },
+    })
+    expect(
+      screen.getByText('No products found for "Nokia"')
+    ).toBeInTheDocument()
+  })
 })
