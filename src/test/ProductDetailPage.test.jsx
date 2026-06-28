@@ -97,4 +97,12 @@ describe('ProductDetailPage', () => {
     expect(screen.getByText('Black').className).toContain('selected')
     expect(screen.getByText('128 GB').className).toContain('selected')
   })
+
+  it('shows error message when API fails', async () => {
+    productApi.getProductDetail.mockRejectedValue(new Error('API error'))
+    renderDetail()
+    expect(
+      await screen.findByText('Could not load product. Please try again.')
+    ).toBeInTheDocument()
+  })
 })

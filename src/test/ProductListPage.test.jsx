@@ -54,4 +54,16 @@ describe('ProductListPage', () => {
     fireEvent.click(screen.getByText('iPhone 14'))
     expect(await screen.findByText('Product Detail')).toBeInTheDocument()
   })
+
+  it('shows error message when API fails', async () => {
+    productApi.getProducts.mockRejectedValue(new Error('API error'))
+    render(
+      <MemoryRouter>
+        <ProductListPage />
+      </MemoryRouter>
+    )
+    expect(
+      await screen.findByText('Could not load products. Please try again.')
+    ).toBeInTheDocument()
+  })
 })
