@@ -1,16 +1,48 @@
-# React + Vite
+# technical-test
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A single-page application for browsing and purchasing mobile devices. Users can explore
+a product catalog, filter by brand or model in real time, view product details and
+add items to their cart.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js v20
+- npm v10
 
-## React Compiler
+## Installation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+```
 
-## Expanding the Oxlint configuration
+## Scripts
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```bash
+npm run dev      # Development mode
+npm run build    # Production build
+npm run test     # Run tests
+npm run lint     # Check code
+```
+
+## Tech stack
+
+- React 18
+- React Router 6
+- Vite
+
+## API
+
+This app consumes the API available at:
+`https://itx-frontend-test.onrender.com`
+
+## Project structure
+```text
+src/
+├── backend/        # API services and data fetching
+├── modules/        # Domain modules (catalog, cart, common)
+├── store/          # Redux store setup
+└── index.js        # Entry point
+```
+
+## Author
+Patricia Mato Miragaya - patriciamato10@gmail.com
