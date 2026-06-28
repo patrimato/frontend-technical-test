@@ -37,6 +37,14 @@ npm run lint     # Check code
 This app consumes the API available at:
 `https://itx-frontend-test.onrender.com`
 
+> **Note:** The API runs on Render's free tier and may take a few seconds to wake up on the first request.
+
+## Technical decisions
+
+- **Context API over Redux** — the app state is minimal (cart count, product list), so React Context is sufficient without the overhead of Redux.
+- **1-hour client-side cache** — API responses are cached in localStorage with a 1-hour TTL to avoid unnecessary requests, as required by the brief.
+- **Pagination** — added pagination (8 products per page).
+
 ## Project structure
 
 ```text
@@ -51,4 +59,4 @@ src/
 
 ## Author
 
-Patricia Mato Miragaya - patriciamato10@gmail.com
+Patricia Mato Miragaya
