@@ -95,6 +95,16 @@
   font-weight: 700;
 }
 
+.plp-status {
+  text-align: center;
+  padding: 48px;
+  color: #666;
+}
+
+.plp-status--error {
+  color: #e53e3e;
+}
+
 @media (max-width: 1024px) {
   .plp-grid {
     grid-template-columns: repeat(3, 1fr);

@@ -9,10 +9,20 @@ function ProductListPage() {
   const [products, setProducts] = useState([])
   const [search, setSearch] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
-    getProducts().then(setProducts)
+    getProducts()
+      .then(data => {
+        setProducts(data)
+        setIsLoading(false)
+      })
+      .catch(err => {
+        setError('Could not load products. Please try again.')
+        setIsLoading(false)
+      })
   }, [])
 
   const filteredProducts = products.filter(product =>
@@ -31,6 +41,9 @@ function ProductListPage() {
     setSearch(e.target.value)
     setCurrentPage(1)
   }
+
+  if (isLoading) return <p className="plp-status">Loading products...</p>
+  if (error) return <p className="plp-status plp-status--error">{error}</p>
 
   return (
     <div className="plp-container">
@@ -55,47 +68,47 @@ function ProductListPage() {
 
       <div className="plp-pagination">
         <button
-            onClick={() => setCurrentPage(prev => prev - 1)}
-            disabled={currentPage === 1}
+          onClick={() => setCurrentPage(prev => prev - 1)}
+          disabled={currentPage === 1}
         >
-            ←
+          ←
         </button>
 
         <button
-            onClick={() => setCurrentPage(1)}
-            className={currentPage === 1 ? 'plp-pagination__active' : ''}
+          onClick={() => setCurrentPage(1)}
+          className={currentPage === 1 ? 'plp-pagination__active' : ''}
         >
-            1
+          1
         </button>
 
         {currentPage > 3 && <span>...</span>}
 
         {Array.from({ length: totalPages }, (_, i) => i + 1)
-            .filter(page => page !== 1 && page !== totalPages && Math.abs(page - currentPage) <= 1)
-            .map(page => (
+          .filter(page => page !== 1 && page !== totalPages && Math.abs(page - currentPage) <= 1)
+          .map(page => (
             <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={currentPage === page ? 'plp-pagination__active' : ''}
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={currentPage === page ? 'plp-pagination__active' : ''}
             >
-                {page}
+              {page}
             </button>
-            ))}
+          ))}
 
         {currentPage < totalPages - 2 && <span>...</span>}
 
         <button
-            onClick={() => setCurrentPage(totalPages)}
-            className={currentPage === totalPages ? 'plp-pagination__active' : ''}
+          onClick={() => setCurrentPage(totalPages)}
+          className={currentPage === totalPages ? 'plp-pagination__active' : ''}
         >
-            {totalPages}
+          {totalPages}
         </button>
 
         <button
-            onClick={() => setCurrentPage(prev => prev + 1)}
-            disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage(prev => prev + 1)}
+          disabled={currentPage === totalPages}
         >
-            →
+          →
         </button>
       </div>
     </div>
