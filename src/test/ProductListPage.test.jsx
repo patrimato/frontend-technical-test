@@ -42,7 +42,6 @@ describe('ProductListPage', () => {
   })
 
   it('navigates to product detail when clicking a product', async () => {
-    let testLocation
     render(
         <MemoryRouter>
         <Routes>
