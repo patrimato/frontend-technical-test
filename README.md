@@ -38,10 +38,11 @@ This app consumes the API available at:
 ## Project structure
 ```text
 src/
-├── backend/        # API services and data fetching
-├── modules/        # Domain modules (catalog, cart, common)
-├── store/          # Redux store setup
-└── index.js        # Entry point
+├── api/            # API calls and cache
+├── components/     # Reusable components
+├── context/        # React Context
+├── pages/          # Application views
+└── utils/          # Helper functions
 ```
 
 ## Author
