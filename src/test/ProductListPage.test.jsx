@@ -35,24 +35,50 @@ describe('ProductListPage', () => {
     )
     await screen.findByText('iPhone 14')
     fireEvent.change(screen.getByPlaceholderText('Search by brand or model'), {
-      target: { value: 'Samsung' }
+      target: { value: 'Samsung' },
     })
     expect(screen.queryByText('iPhone 14')).not.toBeInTheDocument()
     expect(screen.getByText('Galaxy S23')).toBeInTheDocument()
   })
 
   it('navigates to product detail when clicking a product', async () => {
-    let testLocation
     render(
-        <MemoryRouter>
+      <MemoryRouter>
         <Routes>
-            <Route path="/" element={<ProductListPage />} />
-            <Route path="/product/:id" element={<div>Product Detail</div>} />
+          <Route path="/" element={<ProductListPage />} />
+          <Route path="/product/:id" element={<div>Product Detail</div>} />
         </Routes>
-        </MemoryRouter>
+      </MemoryRouter>
     )
     await screen.findByText('iPhone 14')
     fireEvent.click(screen.getByText('iPhone 14'))
     expect(await screen.findByText('Product Detail')).toBeInTheDocument()
+  })
+
+  it('shows error message when API fails', async () => {
+    productApi.getProducts.mockRejectedValue(new Error('API error'))
+    render(
+      <MemoryRouter>
+        <ProductListPage />
+      </MemoryRouter>
+    )
+    expect(
+      await screen.findByText('Could not load products. Please try again.')
+    ).toBeInTheDocument()
+  })
+
+  it('shows empty state when no products match the search', async () => {
+    render(
+      <MemoryRouter>
+        <ProductListPage />
+      </MemoryRouter>
+    )
+    await screen.findByText('iPhone 14')
+    fireEvent.change(screen.getByPlaceholderText('Search by brand or model'), {
+      target: { value: 'Nokia' },
+    })
+    expect(
+      screen.getByText('No products found for "Nokia"')
+    ).toBeInTheDocument()
   })
 })

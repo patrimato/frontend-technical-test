@@ -22,6 +22,7 @@ npm run start    # Development mode
 npm run build    # Production build
 npm run test     # Run tests
 npm run lint     # Check code
+npm run format   # Format code
 ```
 
 ## Tech stack
@@ -30,7 +31,7 @@ npm run lint     # Check code
 - React Router 7
 - Vite
 - Vitest + React Testing Library
-- ESLint
+- ESLint + Prettier
 
 ## API
 

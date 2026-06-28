@@ -1,41 +1,50 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { getProductDetail, addToCart } from '../api/productApi'
 import { useCart } from '../context/CartContext'
+import { formatPrice } from '../utils/formatPrice'
 import './ProductDetailPage.css'
 
 function ProductDetailPage() {
   const { id } = useParams()
-  const navigate = useNavigate()
   const { updateCartCount } = useCart()
   const [product, setProduct] = useState(null)
   const [selectedColor, setSelectedColor] = useState(null)
   const [selectedStorage, setSelectedStorage] = useState(null)
+  const [addedToCart, setAddedToCart] = useState(false)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    getProductDetail(id).then(product => {
-      setProduct(product)
-      setSelectedColor(product.options.colors[0]?.code)
-      setSelectedStorage(product.options.storages[0]?.code)
-    })
+    getProductDetail(id)
+      .then((product) => {
+        setProduct(product)
+        setSelectedColor(product.options.colors[0]?.code)
+        setSelectedStorage(product.options.storages[0]?.code)
+      })
+      .catch(() => {
+        setError('Could not load product. Please try again.')
+      })
   }, [id])
 
   const handleAddToCart = async () => {
     await addToCart({
       id,
       colorCode: selectedColor,
-      storageCode: selectedStorage
+      storageCode: selectedStorage,
     })
     updateCartCount()
+    setAddedToCart(true)
+    setTimeout(() => setAddedToCart(false), 2000)
   }
 
-  if (!product) return <p>Loading...</p>
+  if (error) return <p className="plp-status plp-status--error">{error}</p>
+  if (!product) return <p className="plp-status">Loading...</p>
 
   return (
     <div className="pdp-container">
-      <button className="pdp-back" onClick={() => navigate('/')}>
+      <Link to="/" className="pdp-back">
         ← Back to list
-      </button>
+      </Link>
 
       <div className="pdp-layout">
         <div>
@@ -47,9 +56,13 @@ function ProductDetailPage() {
         </div>
 
         <div>
-          <h1 className="pdp-title">{product.brand} {product.model}</h1>
-          <p className={`pdp-price ${!product.price ? 'pdp-price--unavailable' : ''}`}>
-            {product.price ? `${product.price} €` : 'Price not available'}
+          <h1 className="pdp-title">
+            {product.brand} {product.model}
+          </h1>
+          <p
+            className={`pdp-price ${!product.price ? 'pdp-price--unavailable' : ''}`}
+          >
+            {formatPrice(product.price)}
           </p>
 
           <div className="pdp-specs">
@@ -65,9 +78,11 @@ function ProductDetailPage() {
                 { label: 'Dimensions', value: product.dimentions },
                 { label: 'Weight', value: product.weight },
               ]
-                .filter(spec => spec.value)
-                .map(spec => (
-                  <li key={spec.label}>{spec.label}: {spec.value}</li>
+                .filter((spec) => spec.value)
+                .map((spec) => (
+                  <li key={spec.label}>
+                    {spec.label}: {spec.value}
+                  </li>
                 ))}
             </ul>
           </div>
@@ -76,7 +91,7 @@ function ProductDetailPage() {
             <h2>Options</h2>
             <p>Storage:</p>
             <div className="pdp-option-buttons">
-              {product.options.storages.map(storage => (
+              {product.options.storages.map((storage) => (
                 <button
                   key={storage.code}
                   className={`pdp-option-btn ${selectedStorage === storage.code ? 'pdp-option-btn--selected' : ''}`}
@@ -89,7 +104,7 @@ function ProductDetailPage() {
 
             <p>Color:</p>
             <div className="pdp-option-buttons">
-              {product.options.colors.map(color => (
+              {product.options.colors.map((color) => (
                 <button
                   key={color.code}
                   className={`pdp-option-btn ${selectedColor === color.code ? 'pdp-option-btn--selected' : ''}`}
@@ -104,6 +119,9 @@ function ProductDetailPage() {
           <button className="pdp-add-btn" onClick={handleAddToCart}>
             Add to cart
           </button>
+          {addedToCart && (
+            <p className="pdp-added-feedback">✓ Product added to cart</p>
+          )}
         </div>
       </div>
     </div>
