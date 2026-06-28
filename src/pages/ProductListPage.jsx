@@ -48,7 +48,7 @@ function ProductListPage() {
             <img src={product.imgUrl} alt={`${product.brand} ${product.model}`} />
             <p>{product.brand}</p>
             <p>{product.model}</p>
-            <p>{product.price} €</p>
+            <p>{product.price ? `${product.price} €` : 'Price not available'}</p>
           </div>
         ))}
       </div>
